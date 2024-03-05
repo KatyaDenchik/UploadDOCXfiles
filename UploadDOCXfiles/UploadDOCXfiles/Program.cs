@@ -1,11 +1,24 @@
+using Azure.Identity;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using System;
+using System.IO;
 using UploadDOCXfiles.Components;
 
 namespace UploadDOCXfiles
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
+        public static async Task Main(string[] args)
+        { 
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=docxfilestoragecreate;AccountKey=j1p5SuPFEzerGiO/9IZhSvC6/Tz/C1WKoHmiMlL9NR5HwBjdRFqFRIeH39ywLl2bzKn/2CQBtXGo+AStJqkoKQ==;EndpointSuffix=core.windows.net";
+
+            var blobServiceClient = new BlobServiceClient(connectionString);
+            string containerName = "docxfiles" + Guid.NewGuid().ToString();
+
+            // Create the container and return a container client object
+            BlobContainerClient containerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
