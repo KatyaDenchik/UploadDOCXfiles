@@ -1,26 +1,16 @@
-using Azure.Identity;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using System;
-using System.IO;
-using UploadDOCXfiles.Components;
-using UploadDOCXfiles.Models;
-using UploadDOCXfiles.Services;
+using fasfasdf.Components;
 
-namespace UploadDOCXfiles
+namespace fasfasdf
 {
     public class Program
     {
-        public static async Task Main(string[] args)
-        { 
+        public static void Main(string[] args)
+        {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
-            builder.Services.AddScoped<BlobStorageService>();
-            builder.Services.AddScoped<FormModel>();
-
 
             var app = builder.Build();
 
