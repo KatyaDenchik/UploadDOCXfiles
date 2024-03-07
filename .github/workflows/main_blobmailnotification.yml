@@ -5,7 +5,10 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+  
+permissions:
+  id-token: write
+  
 defaults:
  run:
   working-directory: ./UploadDOCXfiles
@@ -14,7 +17,7 @@ env:
   AZURE_FUNCTIONAPP_NAME: 'BlobMailNotification'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'BlobFunction' # set this to the path to your web app project, defaults to the repository root
   AZURE_DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
-  PROJECT_DOTNET_VERSION: '8.0' # set this to the dotnet version to use
+  PROJECT_DOTNET_VERSION: '8.x' # set this to the dotnet version to use
   
 jobs:
   build-and-deploy:
@@ -50,24 +53,19 @@ jobs:
           app-name: 'BlobMailNotification'
           slot-name: 'production'
           package: 'D:\a\UploadDOCXfiles\UploadDOCXfiles\UploadDOCXfiles\BlobFunction\output'
-        
+          
   build:
     runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup DotNet ${{ env.PROJECT_DOTNET_VERSION }} Environment
+      - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.PROJECT_DOTNET_VERSION }}
+          dotnet-version: '8.x'
           include-prerelease: true
 
-      - name: Setup DotNet ${{ env.AZURE_DOTNET_VERSION }} Environment
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.AZURE_DOTNET_VERSION }}
-          
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
