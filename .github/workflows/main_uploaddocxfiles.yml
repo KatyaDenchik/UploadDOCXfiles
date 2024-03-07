@@ -41,7 +41,7 @@ jobs:
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: '${{env.DOTNET_ROOT}}/${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+        package: 'D:\a\UploadDOCXfiles\UploadDOCXfiles\UploadDOCXfiles\BlobFunction\output'
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
         
   build:
