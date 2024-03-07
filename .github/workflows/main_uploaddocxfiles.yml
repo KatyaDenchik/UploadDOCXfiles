@@ -42,7 +42,7 @@ jobs:
         with:
           app-name: 'BlobMailNotification'
           slot-name: 'production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          package: 'D:\a\UploadDOCXfiles\UploadDOCXfiles\UploadDOCXfiles\BlobFunction\output'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
         
   build:
