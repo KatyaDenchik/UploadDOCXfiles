@@ -9,14 +9,9 @@ namespace UploadDOCXfiles.Validators
 {
     public class DocxFilesValidator : IValidator
     {
-        public bool Validate(string file)
+        public bool Validate(string fileExtension)
         {
-            if (File.Exists(file))
-            {
-                string extension = Path.GetExtension(file);
-                return extension.Equals(".docx", StringComparison.OrdinalIgnoreCase);
-            }
-            return false;
+            return string.Equals(fileExtension, ".docx", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

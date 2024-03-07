@@ -42,18 +42,23 @@ namespace UploadDOCXfiles.Models
 
             if (file != null)
             {
+
+                var fileName = file.Name;
+
+                FileExtension = Path.GetExtension(fileName);
+
                 File = new MemoryStream();
                 await file.OpenReadStream().CopyToAsync(File);
+
+              
             }
 
-            var fileName = file.Name;
-
-            FileExtension = Path.GetExtension(fileName);
+           
         }
 
         public async Task UploadFile()
         {
-            if (File != null )
+            if (File != null && !string.IsNullOrEmpty(FileExtension) && docxFilesValidator.Validate(FileExtension))
             {
                 await blobStorageService.UploadAsync(File);
             }
