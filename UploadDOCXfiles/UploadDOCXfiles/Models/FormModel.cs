@@ -30,9 +30,11 @@ namespace UploadDOCXfiles.Models
                 {
                     email = value;
                 }
+                else email = string.Empty;
             }
         }
         public MemoryStream File { get; set; }
+        public string FileExtension { get; set; }
 
         public async Task HandleFileSelected(InputFileChangeEventArgs e)
         {
@@ -43,6 +45,10 @@ namespace UploadDOCXfiles.Models
                 File = new MemoryStream();
                 await file.OpenReadStream().CopyToAsync(File);
             }
+
+            var fileName = file.Name;
+
+            FileExtension = Path.GetExtension(fileName);
         }
 
         public async Task UploadFile()
