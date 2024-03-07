@@ -26,7 +26,7 @@ namespace UploadDOCXfiles.Services
             var blobClient = containerClient.GetBlobClient(fileName);
 
             memoryStream.Position = 0;
-            var t = await blobClient.UploadAsync(memoryStream, true);
+            await blobClient.UploadAsync(memoryStream, true);
         }
 
         private async void InitContainer()

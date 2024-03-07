@@ -6,6 +6,7 @@ using System.IO;
 using UploadDOCXfiles.Components;
 using UploadDOCXfiles.Models;
 using UploadDOCXfiles.Services;
+using UploadDOCXfiles.Validators;
 
 namespace UploadDOCXfiles
 {
@@ -20,6 +21,8 @@ namespace UploadDOCXfiles
                 .AddInteractiveServerComponents();
             builder.Services.AddScoped<BlobStorageService>();
             builder.Services.AddScoped<FormModel>();
+            builder.Services.AddScoped<EmailValidator>();
+            builder.Services.AddScoped<DocxFilesValidator>();
 
 
             var app = builder.Build();
