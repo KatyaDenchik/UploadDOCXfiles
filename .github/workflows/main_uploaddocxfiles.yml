@@ -11,54 +11,81 @@ defaults:
   working-directory: ./UploadDOCXfiles
   
 env:
+  AZURE_FUNCTIONAPP_NAME: 'BlobMailNotification'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'BlobFunction' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '8.0.x' # set this to the dotnet version to use
-
+  AZURE_DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
+  PROJECT_DOTNET_VERSION: '8.0.x' # set this to the dotnet version to use
+  
 jobs:
   build-and-deploy:
     runs-on: windows-latest
-    permissions:
-      id-token: write #This is required for requesting the JWT
+    environment: dev
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v3
+
+    - name: Setup DotNet ${{ env.AZURE_DOTNET_VERSION }} Environment
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.AZURE_DOTNET_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Dotnet'
+      shell: pwsh
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        dotnet build --configuration Release --output ./output
+        popd
+
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        
+  build:
+    runs-on: windows-latest
 
     steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+      - name: Setup DotNet ${{ env.AZURE_DOTNET_VERSION }} Environment
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ env.AZURE_DOTNET_VERSION }}
+          include-prerelease: true
 
-      - name: 'Resolve Project Dependencies Using Dotnet'
-        shell: pwsh
-        run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration Release --output ./output
-          popd
-      
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4E6D081A6090402E8C653B7D6272B685 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3CD47BB4D0BF424D84ED72448E11761E }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EF01FD5F414A463CA4EECC2074FADCD0 }}
-
-      - name: 'Run Azure Functions Action'
-        uses: Azure/functions-action@v1
-        id: fa
-        with:
-          app-name: 'DocxEmailNotification'
-          slot-name: 'production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-
-      - name: 'Build with dotnet'
+      - name: Build with dotnet
         run: dotnet build --configuration Release
 
-      - name: 'Dotnet publish'
-        run: dotnet publish -c Release -o ${{env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/UploadDOCXfiles
 
-      - name: 'Upload artifact for deployment job'
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: function-app
-          path: ${{env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/UploadDOCXfiles
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+      
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'UploadDOCXFiles'
+          slot-name: 'Production'
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_084C1C17F7AC47499157BADCD6A22211 }}
