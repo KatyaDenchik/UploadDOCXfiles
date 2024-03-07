@@ -12,7 +12,8 @@ defaults:
   
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'BlobFunction' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '8.0.x' # set this to the dotnet version to use
+  AZURE_DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
+  PROJECT_DOTNET_VERSION: '8.0.x' # set this to the dotnet version to use
 
 jobs:
   build-and-deploy:
@@ -24,10 +25,15 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
 
-      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+      - name: Setup DotNet ${{ env.AZURE_DOTNET_VERSION }} Environment
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ env.AZURE_DOTNET_VERSION }}
+          
+      - name: Setup DotNet ${{ env.PROJECT_DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.PROJECT_DOTNET_VERSION }}
 
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: pwsh
