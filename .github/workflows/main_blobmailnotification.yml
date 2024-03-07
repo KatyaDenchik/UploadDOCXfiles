@@ -26,12 +26,10 @@ jobs:
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
-
-      - name: Setup DotNet ${{ env.AZURE_DOTNET_VERSION }} Environment
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.AZURE_DOTNET_VERSION }}
-
+        
+      - name: Azure Login
+        run: az login
+        
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -39,6 +37,11 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_08CE028A434447DAA5331D8F36CF753D }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_790CBD7A1F244013B347F08F7864C9B8 }}
           
+      - name: Setup DotNet ${{ env.AZURE_DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.AZURE_DOTNET_VERSION }}
+
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: pwsh
         run: |
@@ -65,6 +68,11 @@ jobs:
         with:
           dotnet-version: '8.x'
           include-prerelease: true
+
+      - name: Setup DotNet ${{ env.AZURE_DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.AZURE_DOTNET_VERSION }}
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
