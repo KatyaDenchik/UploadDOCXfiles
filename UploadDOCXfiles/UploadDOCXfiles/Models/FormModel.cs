@@ -52,8 +52,6 @@ namespace UploadDOCXfiles.Models
 
               
             }
-
-           
         }
 
         public async Task UploadFile()

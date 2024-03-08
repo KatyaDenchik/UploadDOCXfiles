@@ -2,7 +2,7 @@
   "profiles": {
     "BlobFunction": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7176",
+      "commandLineArgs": "--port 7284",
       "launchBrowser": false
     }
   }
