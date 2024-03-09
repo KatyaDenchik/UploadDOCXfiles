@@ -2,6 +2,7 @@
 @using System.Text.Json
 @using UploadDOCXfiles.Models
 @inject FormModel formModel
+@inject NotificationService NotificationService
 
 <PageTitle>Upload files</PageTitle>
 
@@ -9,8 +10,7 @@
     <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 420px;">
 
         <h3>Завантажити документ</h3>
-
-        <InputFile OnChange="formModel.HandleFileSelected" accept=".docx" Style="margin-top: 20px;" />
+        <InputFile @key=@(formModel.InputFileId) OnChange="formModel.HandleFileSelected" accept=".docx" Style="margin-top: 20px;" />
 
         <div style="margin-top: 20px;"></div>
 
@@ -20,16 +20,18 @@
             <DataAnnotationsValidator />
             <RadzenTextBox Placeholder="email" Name="EmailBox" @bind-Value="@formModel.Email" Style="margin-top: 20px; width: 80%; display: flex; justify-content: center; align-items: center; " />
 
-            <RadzenRequiredValidator @bind-Value="@popup" Component="EmailBox" Text="Email is required" Popup="@popup" Style="position: absolute" />
-            <RadzenEmailValidator @bind-Value="@popup" Component="EmailBox" Text="Provide a valid email address" Popup="@popup" Style="position: absolute" />
+            <RadzenRequiredValidator Component="EmailBox" Text="Необхідно вказати адресу електронної пошти" Style="position: absolute" />
+            <RadzenEmailValidator Component="EmailBox" Text="Укажіть дійсну електронну адресу"  Style="position: absolute" />
         </RadzenTemplateForm>
 
         <RadzenButton Click="formModel.UploadFile" Text="Відправити" Style="margin-top: 20px; width: 100%; display: flex; justify-content: center; align-items: center;"
                       disabled="@(formModel.File == null|| string.IsNullOrWhiteSpace(formModel.Email))" />
 
     </RadzenCard>
+
 </div>
+
+
 @code {
-    bool popup;
 }
 

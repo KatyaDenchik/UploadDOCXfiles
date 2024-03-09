@@ -1,12 +1,14 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Radzen;
 using System;
 using System.IO;
 using UploadDOCXfiles.Components;
 using UploadDOCXfiles.Models;
-using UploadDOCXfiles.Services;
-using UploadDOCXfiles.Validators;
+using ServiceLayer.Services;
+using ServiceLayer.Validators;
+using ServiceLayer.Helpers;
 
 namespace UploadDOCXfiles
 {
@@ -23,6 +25,7 @@ namespace UploadDOCXfiles
             builder.Services.AddScoped<FormModel>();
             builder.Services.AddScoped<EmailValidator>();
             builder.Services.AddScoped<DocxFilesValidator>();
+            builder.Services.AddScoped<NotificationService>();
 
 
             var app = builder.Build();

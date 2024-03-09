@@ -1,8 +1,16 @@
 using BlobFunction;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-BlobFunction.BlobFunction.SendMail();
+using ServiceLayer.Helpers;
+using ServiceLayer.Services;
+using ServiceLayer.Services.Abstract;
 var host = new HostBuilder()
+    .ConfigureServices(services =>
+    {
+        services.AddScoped<IEmailServices, EmailService>();
+    })
     .ConfigureFunctionsWorkerDefaults()
     .Build();
+
 
 host.Run();

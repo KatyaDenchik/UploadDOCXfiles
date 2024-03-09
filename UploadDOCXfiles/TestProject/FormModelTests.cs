@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Components.Forms;
 using UploadDOCXfiles.Models;
-using UploadDOCXfiles.Services;
-using UploadDOCXfiles.Validators;
+using ServiceLayer.Services;
+using ServiceLayer.Validators;
 using Microsoft.AspNetCore.Components.Forms;
 using System.IO;
+using Radzen;
+using ServiceLayer.Validators;
 
 namespace TestProject
 {
@@ -12,20 +14,22 @@ namespace TestProject
         private BlobStorageService mockBlobStorageService;
         private EmailValidator mockEmailValidator;
         private DocxFilesValidator mockDocxFilesValidator;
+        private NotificationService mockNotificationService;
 
         [SetUp]
         public void Setup()
         {
-            mockBlobStorageService = new BlobStorageService();
-            mockEmailValidator = new EmailValidator();
-            mockDocxFilesValidator = new DocxFilesValidator(); 
+            //mockBlobStorageService = new BlobStorageService();
+            //mockEmailValidator = new EmailValidator();
+            //mockDocxFilesValidator = new DocxFilesValidator(); 
+            //mockNotificationService = new NotificationService();
         }
 
         [Test]
         public void EmailSetter_SetsEmail_WhenValidEmailIsPassed()
         {
             // Arrange
-            var formModel = new FormModel(mockBlobStorageService, mockEmailValidator, mockDocxFilesValidator);
+            var formModel = new FormModel(mockBlobStorageService, mockEmailValidator, mockDocxFilesValidator, mockNotificationService);
             var validEmail = "test@example.com";
 
             // Act
@@ -57,7 +61,7 @@ namespace TestProject
         public async Task HandleFileSelected_DoesNotSetFileAndFileExtension_WhenInputFileChangeEventArgsIsNull()
         {
             // Arrange
-            var formModel = new FormModel(mockBlobStorageService, mockEmailValidator, mockDocxFilesValidator);
+            var formModel = new FormModel(mockBlobStorageService, mockEmailValidator, mockDocxFilesValidator, mockNotificationService);
             InputFileChangeEventArgs mockInputFileChangeEventArgs = null;
 
             // Act

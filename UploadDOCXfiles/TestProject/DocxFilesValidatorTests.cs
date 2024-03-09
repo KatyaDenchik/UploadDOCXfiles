@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UploadDOCXfiles.Interfaces
+namespace TestProject
 {
-    public interface IValidator
+    public class DocxFilesValidatorTests
     {
-        public bool Validate(string inputString);
+
     }
 }

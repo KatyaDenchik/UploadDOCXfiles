@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "TestProject\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobFunction", "BlobFunction\BlobFunction.csproj", "{FAE267EA-9B6E-4317-BC8F-31F55F65A6B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{16DDD3E1-4804-4F6B-8CFC-7FFA015D908F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FAE267EA-9B6E-4317-BC8F-31F55F65A6B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAE267EA-9B6E-4317-BC8F-31F55F65A6B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAE267EA-9B6E-4317-BC8F-31F55F65A6B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16DDD3E1-4804-4F6B-8CFC-7FFA015D908F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16DDD3E1-4804-4F6B-8CFC-7FFA015D908F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16DDD3E1-4804-4F6B-8CFC-7FFA015D908F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16DDD3E1-4804-4F6B-8CFC-7FFA015D908F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
