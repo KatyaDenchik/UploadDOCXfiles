@@ -1,4 +1,4 @@
-name: Сборка и развертывание приложения .NET Core в веб-приложение UploadDOCXFiles
+name: Build and Deploy a .NET Core Application to a Web App Upload DOCX Files
 on:
   push:
     branches:

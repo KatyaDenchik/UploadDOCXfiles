@@ -11,7 +11,7 @@ namespace ServiceLayer.Validators
         /// <returns>True if the file extension is ".docx"; otherwise, false.</returns>
         public bool Validate(string fileExtension)
         {
-            return string.Equals(fileExtension, ".docx", StringComparison.OrdinalIgnoreCase);
+            return string.Equals(fileExtension, ".docx", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

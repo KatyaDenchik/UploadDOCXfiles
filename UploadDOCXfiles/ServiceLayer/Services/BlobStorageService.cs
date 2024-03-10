@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Specialized;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ServiceLayer.Helpers;
@@ -46,7 +47,7 @@ namespace ServiceLayer.Services
         /// <param name="blob">The BlobClient representing the blob.</param>
         /// <param name="email">The email metadata value to be added.</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        public async Task AddBlobMetadataAsync(BlobClient blob, string email)
+        public async Task AddBlobMetadataAsync(BlobBaseClient blob, string email)
         {
             try
             {
@@ -61,6 +62,31 @@ namespace ServiceLayer.Services
             {
                 logger.LogError(e.ToString());
             }
+        }
+
+        /// <summary>
+        /// Asynchronously retrieves the value associated with the 'email' key from the specified metadata dictionary.
+        /// </summary>
+        /// <param name="metadata">The dictionary containing metadata.</param>
+        /// <returns>
+        /// The value associated with the 'email' key if found; otherwise, an empty string.
+        /// </returns>
+        
+        public async Task<string> GetBlobMetadataEmailAsync(IDictionary<string, string> metadata)
+        {
+            try
+            {
+                if (metadata.ContainsKey("email"))
+                {
+                    return metadata["email"];
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.ToString());
+            }
+            logger.LogError("Key 'email' not found in metadata");
+            return string.Empty;
         }
 
         /// <summary>

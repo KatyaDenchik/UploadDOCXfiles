@@ -1,14 +1,14 @@
-name: Сборка и развертывание приложения .NET Core в приложении-функции BlobFunction20240308132827
+name: Build and Deploy a .NET Core Application in a Function App BlobFunction20240308132827
 on:
   push:
     branches:
     - main
 env:
   AZURE_FUNCTIONAPP_NAME: BlobFunction20240308132827
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: BlobFunction\published
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: UploadDOCXfiles\BlobFunction\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: BlobFunction
+  WORKING_DIRECTORY: UploadDOCXfiles\BlobFunction
 jobs:
   build:
     runs-on: windows-latest

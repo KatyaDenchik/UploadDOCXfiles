@@ -1,8 +1,10 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
 using ServiceLayer.Helpers;
+using ServiceLayer.Proxy;
 using ServiceLayer.Services.Abstract;
 using ServiceLayer.SubModels;
+using ISmtpClient = ServiceLayer.Services.Abstract.ISmtpClient;
 
 namespace ServiceLayer.Services
 {
@@ -18,11 +20,23 @@ namespace ServiceLayer.Services
             address = SecretsHelper.GetSecret<EmailService>("Email", "Address");
             password = SecretsHelper.GetSecret<EmailService>("Email", "Password");
         }
+       
         /// <summary>
         /// Sends an email using the provided email information.
         /// </summary>
         /// <param name="emailInformation">The information required to compose and send the email.</param>
-        public void SendEmail(EmailInformation emailInformation)
+        public void SendEmail(EmailInformation emailInformation )
+        {
+            var client = new SmtpClientProxy();
+            SendEmail(emailInformation, client);
+        }
+
+        /// <summary>
+        /// Sends an email using the provided email information.
+        /// </summary>
+        /// <param name="emailInformation">The information required to compose and send the email.</param>
+        /// <param name="client">Smtp client for email sending.</param>
+        public void SendEmail(EmailInformation emailInformation, ISmtpClient client)
         {
             MimeMessage message = new MimeMessage();
             message.From.Add(new MailboxAddress(emailInformation.From, address));
@@ -34,7 +48,6 @@ namespace ServiceLayer.Services
                 HtmlBody = emailInformation.Body
             }.ToMessageBody();
 
-            using SmtpClient client = new SmtpClient();
 
             client.Connect("smtp.gmail.com", 465, true);
             client.Authenticate(login, password);
@@ -42,6 +55,5 @@ namespace ServiceLayer.Services
 
             client.Disconnect(true);
         }
-
     }
 }

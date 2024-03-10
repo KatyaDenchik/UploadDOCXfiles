@@ -4,7 +4,6 @@ namespace ServiceLayer.Services.Abstract
 {
     public interface IEmailServices
     {
-        public void SendEmail(EmailInformation emailInformation
-            );
+        public void SendEmail(EmailInformation emailInformation);
     }
 }

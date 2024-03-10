@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 using ServiceLayer.Services;
 using ServiceLayer.Validators;
 using static ServiceLayer.Extensions.EnumExtensions;
+using ServiceLayer.Services.Abstract;
 
 namespace UploadDOCXfiles.Models
 {
     public class FormModel
     {
-        private readonly BlobStorageService blobStorageService;
+        private readonly IBlobStorageService blobStorageService;
         private readonly EmailValidator emailValidator;
         private readonly DocxFilesValidator docxFilesValidator;
         private readonly NotificationService notificationService;
-        public FormModel(BlobStorageService blobStorageService, EmailValidator emailValidator,
+        public FormModel(IBlobStorageService blobStorageService, EmailValidator emailValidator,
                          DocxFilesValidator docxFilesValidator, NotificationService notificationService)
         {
             this.blobStorageService = blobStorageService;
@@ -25,7 +26,11 @@ namespace UploadDOCXfiles.Models
             this.docxFilesValidator = docxFilesValidator;
             this.notificationService = notificationService;
         }
-        private string email;
+
+        /// <summary>
+        /// Gets or sets the email address, validating it with the specified email validator.
+        /// If the provided email address is valid, sets the email property; otherwise, sets it to an empty string.
+        /// </summary>
         public string Email
         {
             get => email;
@@ -38,9 +43,26 @@ namespace UploadDOCXfiles.Models
                 else email = string.Empty;
             }
         }
+        private string email;
+
+        /// <summary>
+        /// Gets or sets the memory stream representing the file content.
+        /// </summary>
         public MemoryStream File { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
         public string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extension of the file.
+        /// </summary>
         public string FileExtension { get; set; }
+
+        /// <summary>
+        /// Gets the unique identifier of the input file.
+        /// </summary>
         public string InputFileId { get; private set; } = Guid.NewGuid().ToString();
 
         /// <summary>
@@ -52,16 +74,21 @@ namespace UploadDOCXfiles.Models
         {
             var file = e.File;
 
-            if (file != null)
+            if (file == null)
             {
-
-                FileName = file.Name;
-
-                FileExtension = Path.GetExtension(FileName);
-
-                File = new MemoryStream();
-                await file.OpenReadStream().CopyToAsync(File);
+                return;
             }
+            var extention = Path.GetExtension(file.Name);
+            if (!docxFilesValidator.Validate(extention))
+            {
+                return;
+            }
+            FileName = file.Name;
+
+            FileExtension = extention;
+
+            File = new MemoryStream();
+            await file.OpenReadStream().CopyToAsync(File);
         }
 
         /// <summary>
@@ -89,6 +116,7 @@ namespace UploadDOCXfiles.Models
         {
             Email = string.Empty;
             FileExtension = string.Empty;
+            File = null;
             InputFileId = Guid.NewGuid().ToString();
         }
 

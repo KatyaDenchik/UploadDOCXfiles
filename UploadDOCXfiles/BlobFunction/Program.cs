@@ -8,6 +8,7 @@ var host = new HostBuilder()
     .ConfigureServices(services =>
     {
         services.AddScoped<IEmailServices, EmailService>();
+        services.AddScoped<IBlobStorageService, BlobStorageService>();
     })
     .ConfigureFunctionsWorkerDefaults()
     .Build();

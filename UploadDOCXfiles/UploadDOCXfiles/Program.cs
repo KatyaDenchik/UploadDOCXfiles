@@ -9,6 +9,7 @@ using UploadDOCXfiles.Models;
 using ServiceLayer.Services;
 using ServiceLayer.Validators;
 using ServiceLayer.Helpers;
+using ServiceLayer.Services.Abstract;
 
 namespace UploadDOCXfiles
 {
@@ -21,7 +22,7 @@ namespace UploadDOCXfiles
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
-            builder.Services.AddScoped<BlobStorageService>();
+            builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
             builder.Services.AddScoped<FormModel>();
             builder.Services.AddScoped<EmailValidator>();
             builder.Services.AddScoped<DocxFilesValidator>();
